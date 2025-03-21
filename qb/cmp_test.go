@@ -24,6 +24,11 @@ func TestCmp(t *testing.T) {
 			N: []string{"eq"},
 		},
 		{
+			C: Eq("token"),
+			S: "\"token\"=?",
+			N: []string{"token"},
+		},
+		{
 			C: Eq("Eq"),
 			S: "\"Eq\"=?",
 			N: []string{"eq"},
@@ -184,7 +189,7 @@ func TestCmp(t *testing.T) {
 		},
 		{
 			C: In("in"),
-			S: "in IN ?",
+			S: "\"in\" IN ?",
 			N: []string{"in"},
 		},
 		{
@@ -199,7 +204,7 @@ func TestCmp(t *testing.T) {
 		},
 		{
 			C: InTuple("in", 2),
-			S: "in IN (?,?)",
+			S: "\"in\" IN (?,?)",
 			N: []string{"in[0]", "in[1]"},
 		},
 		{
@@ -326,7 +331,7 @@ func TestCmp(t *testing.T) {
 		},
 		{
 			C: InNamed("in", "name"),
-			S: "in IN ?",
+			S: "\"in\" IN ?",
 			N: []string{"name"},
 		},
 		{
@@ -377,7 +382,7 @@ func TestCmp(t *testing.T) {
 		},
 		{
 			C: InTupleNamed("in", 2, "name"),
-			S: "in IN (?,?)",
+			S: "\"in\" IN (?,?)",
 			N: []string{"name[0]", "name[1]"},
 		},
 		{
@@ -418,7 +423,7 @@ func TestCmp(t *testing.T) {
 		},
 		{
 			C: InLit("in", "litval"),
-			S: "in IN litval",
+			S: "\"in\" IN litval",
 		},
 		{
 			C: ContainsLit("cnt", "litval"),

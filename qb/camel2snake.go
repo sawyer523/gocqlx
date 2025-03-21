@@ -56,10 +56,72 @@ func quote(s string) string {
 		return s
 	}
 	if !hasUpper(s) {
+		if _, ok := keywords[s]; ok {
+			return "\"" + s + "\""
+		}
 		return s
 	}
 	if s[0] == '"' && s[len(s)-1] == '"' {
 		return s
 	}
 	return "\"" + s + "\""
+}
+
+var keywords = map[string]struct{}{
+	"add":          {},
+	"allow":        {},
+	"alter":        {},
+	"and":          {},
+	"apply":        {},
+	"asc":          {},
+	"authorize":    {},
+	"batch":        {},
+	"begin":        {},
+	"by":           {},
+	"columnfamily": {},
+	"create":       {},
+	"delete":       {},
+	"desc":         {},
+	"describe":     {},
+	"drop":         {},
+	"entries":      {},
+	"execute":      {},
+	"from":         {},
+	"full":         {},
+	"grant":        {},
+	"if":           {},
+	"in":           {},
+	"index":        {},
+	"infinity":     {},
+	"insert":       {},
+	"into":         {},
+	"keyspace":     {},
+	"limit":        {},
+	"modify":       {},
+	"nan":          {},
+	"norecursive":  {},
+	"not":          {},
+	"null":         {},
+	"of":           {},
+	"on":           {},
+	"or":           {},
+	"order":        {},
+	"primary":      {},
+	"rename":       {},
+	"replace":      {},
+	"revoke":       {},
+	"schema":       {},
+	"select":       {},
+	"set":          {},
+	"table":        {},
+	"to":           {},
+	"token":        {},
+	"truncate":     {},
+	"unlogged":     {},
+	"update":       {},
+	"use":          {},
+	"using":        {},
+	"view":         {},
+	"where":        {},
+	"with":         {},
 }
