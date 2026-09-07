@@ -13,8 +13,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/gocql/gocql"
-	"github.com/scylladb/gocqlx/v3"
+	gocql "github.com/apache/cassandra-gocql-driver/v2"
+	"github.com/sawyer523/gocqlx"
 )
 
 var defaultClusterConfig = gocql.NewCluster()
@@ -150,8 +150,8 @@ func renderTemplate(md *gocql.KeyspaceMetadata) ([]byte, error) {
 			if c.Validator == "decimal" && !existsInSlice(imports, "gopkg.in/inf.v0") {
 				imports = append(imports, "gopkg.in/inf.v0")
 			}
-			if c.Validator == "duration" && !existsInSlice(imports, "github.com/gocql/gocql") {
-				imports = append(imports, "github.com/gocql/gocql")
+			if c.Validator == "duration" && !existsInSlice(imports, "github.com/apache/cassandra-gocql-driver/v2") {
+				imports = append(imports, "github.com/apache/cassandra-gocql-driver/v2")
 			}
 		}
 	}

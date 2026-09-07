@@ -3,9 +3,8 @@ module github.com/sawyer523/gocqlx/cmd/schemagen
 go 1.23
 
 require (
-	github.com/gocql/gocql v1.7.0
+	github.com/apache/cassandra-gocql-driver/v2 v2.1.2
 	github.com/google/go-cmp v0.7.0
-	github.com/scylladb/gocqlx/v3 v3.0.1
 )
 
 require (

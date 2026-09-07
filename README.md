@@ -4,7 +4,7 @@ This is a fork of the original [gocqlx](https://github.com/scylladb/gocqlx) libr
 
 ## Overview
 
-[gocqlx](https://github.com/scylladb/gocqlx) is a popular Go library that provides a set of extensions to the [gocql](https://github.com/gocql/gocql) driver for Apache Cassandra and ScyllaDB. It simplifies database interactions by offering a more ergonomic API for query building and execution.
+[gocqlx](https://github.com/scylladb/gocqlx) is a popular Go library that provides a set of extensions to the [gocql](https://github.com/apache/cassandra-gocql-driver/v2) driver for Apache Cassandra and ScyllaDB. It simplifies database interactions by offering a more ergonomic API for query building and execution.
 
 This fork extends the functionality of the `qb` package to support **camelCase column names**, which is a common naming convention in many projects. The original library assumes snake_case column names by default, which may not align with your project's naming conventions.
 
@@ -146,7 +146,7 @@ Generates `models/models.go` as follows:
 
 package models
 
-import "github.com/scylladb/gocqlx/v3/table"
+import "github.com/sawyer523/gocqlx/table"
 
 // Table models.
 var (
@@ -192,7 +192,7 @@ var (
 This project is distributed under the Apache 2.0 license. See the [LICENSE](https://github.com/sawyer523/gocqlx/blob/master/LICENSE) file for details.
 It contains software from:
 
-* [gocql project](https://github.com/gocql/gocql), licensed under the BSD license
+* [gocql project](https://github.com/apache/cassandra-gocql-driver/v2), licensed under the BSD license
 * [sqlx project](https://github.com/jmoiron/sqlx), licensed under the MIT license
 
 Apache®, Apache Cassandra® are either registered trademarks or trademarks of 

@@ -12,7 +12,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/scylladb/gocqlx/v3"
+	"github.com/sawyer523/gocqlx"
 )
 
 // DeleteBuilder builds CQL DELETE statements.

@@ -3,7 +3,7 @@
 package foobar
 
 import (
-	"github.com/scylladb/gocqlx/v3/table"
+	"github.com/sawyer523/gocqlx/table"
 )
 
 // Table models.
