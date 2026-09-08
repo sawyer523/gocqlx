@@ -109,17 +109,63 @@ func mapScyllaToGoType(s string) string {
 	return prefix + camelize(s) + "UserType"
 }
 
-func typeToString(t interface{}) string {
-	tType := fmt.Sprintf("%T", t)
-	switch tType {
-	case "gocql.NativeType":
-		return t.(gocql.NativeType).String()
-	case "gocql.CollectionType":
-		collectionType := t.(gocql.CollectionType).String()
-		collectionType = strings.Replace(collectionType, "(", "<", -1)
-		collectionType = strings.Replace(collectionType, ")", ">", -1)
-		return collectionType
-	default:
-		panic(fmt.Sprintf("Did not expect %v type in user defined type", tType))
+// cqlPrimitiveTypes maps gocql native type identifiers to CQL type names.
+// The names must match the keys of the types map.
+var cqlPrimitiveTypes = map[gocql.Type]string{
+	gocql.TypeAscii:     "ascii",
+	gocql.TypeBigInt:    "bigint",
+	gocql.TypeBlob:      "blob",
+	gocql.TypeBoolean:   "boolean",
+	gocql.TypeCounter:   "counter",
+	gocql.TypeDate:      "date",
+	gocql.TypeDecimal:   "decimal",
+	gocql.TypeDouble:    "double",
+	gocql.TypeDuration:  "duration",
+	gocql.TypeFloat:     "float",
+	gocql.TypeInet:      "inet",
+	gocql.TypeInt:       "int",
+	gocql.TypeSmallInt:  "smallint",
+	gocql.TypeText:      "text",
+	gocql.TypeTime:      "time",
+	gocql.TypeTimestamp: "timestamp",
+	gocql.TypeTimeUUID:  "timeuuid",
+	gocql.TypeTinyInt:   "tinyint",
+	gocql.TypeUUID:      "uuid",
+	gocql.TypeVarchar:   "varchar",
+	gocql.TypeVarint:    "varint",
+}
+
+// typeToString renders a gocql TypeInfo as a CQL type string, e.g. "int",
+// "set<text>" or "map<uuid, text>". Types the driver cannot resolve (e.g. user
+// defined types) are reported with their raw validator string, such as
+// "frozen<address>", so that mapScyllaToGoType can map them to the generated
+// UserType structs.
+func typeToString(t gocql.TypeInfo) string {
+	switch info := t.(type) {
+	case gocql.CollectionType:
+		switch info.Type() {
+		case gocql.TypeMap:
+			return "map<" + typeToString(info.Key) + ", " + typeToString(info.Elem) + ">"
+		case gocql.TypeList:
+			return "list<" + typeToString(info.Elem) + ">"
+		case gocql.TypeSet:
+			return "set<" + typeToString(info.Elem) + ">"
+		}
+	case gocql.TupleTypeInfo:
+		elems := make([]string, len(info.Elems))
+		for i, elem := range info.Elems {
+			elems[i] = typeToString(elem)
+		}
+		return "tuple<" + strings.Join(elems, ", ") + ">"
+	case gocql.UDTTypeInfo:
+		return info.Name
 	}
+
+	if name, ok := cqlPrimitiveTypes[t.Type()]; ok {
+		return name
+	}
+
+	// Unknown types (e.g. user defined types) are held by the driver as a
+	// string type carrying the raw validator, formatting it exposes that string.
+	return fmt.Sprintf("%v", t)
 }

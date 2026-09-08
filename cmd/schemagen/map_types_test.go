@@ -6,6 +6,8 @@ package main
 
 import (
 	"testing"
+
+	gocql "github.com/apache/cassandra-gocql-driver/v2"
 )
 
 func TestMapScyllaToGoType(t *testing.T) {
@@ -46,6 +48,32 @@ func TestMapScyllaToGoType(t *testing.T) {
 			tt.input, func(t *testing.T) {
 				if got := mapScyllaToGoType(tt.input); got != tt.want {
 					t.Errorf("mapScyllaToGoType() = %v, want %v", got, tt.want)
+				}
+			},
+		)
+	}
+}
+
+func TestTypeToString(t *testing.T) {
+	tests := []struct {
+		name  string
+		input gocql.TypeInfo
+		want  string
+	}{
+		{"int", gocql.NewNativeType(4, gocql.TypeInt, ""), "int"},
+		{"text", gocql.NewNativeType(4, gocql.TypeText, ""), "text"},
+		{"timestamp", gocql.NewNativeType(4, gocql.TypeTimestamp, ""), "timestamp"},
+		{"tuple", gocql.TupleTypeInfo{Elems: []gocql.TypeInfo{
+			gocql.NewNativeType(4, gocql.TypeBoolean, ""),
+			gocql.NewNativeType(4, gocql.TypeInt, ""),
+		}}, "tuple<boolean, int>"},
+		{"udt", gocql.UDTTypeInfo{Keyspace: "zerosecond", Name: "address"}, "address"},
+	}
+	for _, tt := range tests {
+		t.Run(
+			tt.name, func(t *testing.T) {
+				if got := typeToString(tt.input); got != tt.want {
+					t.Errorf("typeToString() = %v, want %v", got, tt.want)
 				}
 			},
 		)
